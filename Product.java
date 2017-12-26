@@ -12,21 +12,19 @@ public class Product {
 	private User user;
 	private String image;
 	private String status;
-	public Product(){}
-	
-	public Product( String name, String date, double price, String descreption,
-			String image, String status) {
-		super();
-		
+	public Product( String name, String date, double price,Category category, String descreption,User user,
+			String image) {
 		this.name = name;
 		this.date = date;
 		this.price = price;
-		
+		this.category=category;
 		this.descreption = descreption;
-		
+		this.user =user;
 		this.image = image;
-		this.status = status;
+		
 	}
+	public Product( ){}
+	
 	public int getId() {
 		return id;
 	}
@@ -39,13 +37,13 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDate() {
+	public String  getDate() {
 		return date;
 	}
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 	public void setPrice(double price) {

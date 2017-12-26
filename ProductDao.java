@@ -19,7 +19,6 @@ import com.olx.model.UserDtoReq;
 public class ProductDao implements IProductDao{
 	public Connection con;
 	private Statement stmt;
-	
 	public ProductDao(){
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -32,7 +31,6 @@ public class ProductDao implements IProductDao{
 			System.out.println("Error in connection with db");
 			e.printStackTrace();
 		}
-			
 	}
 	@Override
 	public Set<ProductDtoRes> findAll() {
@@ -40,10 +38,10 @@ public class ProductDao implements IProductDao{
 		Set<ProductDtoRes> products = new HashSet<ProductDtoRes>();
 		try {
 			ProductDtoRes productt = new ProductDtoRes();
-			Product product = new Product();
+			
 			rs = stmt.executeQuery("select product.id,product.name,product.date,price,descreption,user.name,product.image,product.status,category.name from product,user,category where user.id=product.user_id and product.categ_id=category.id");
 			while(rs.next()){
-				
+				Product product = new Product();
 				product.setId(rs.getInt(1));
 				product.setName(rs.getString(2));
 				product.setDate(rs.getString(3));
@@ -72,10 +70,10 @@ public class ProductDao implements IProductDao{
 		Set<ProductDtoRes> products = new HashSet<ProductDtoRes>();
 		try {
 			ProductDtoRes productt = new ProductDtoRes();
-			Product product = new Product();
+			
 			rs = stmt.executeQuery("select product.id,product.name,product.date,price,descreption,user.name,product.image,product.status,category.name from product,user,category where user.id=product.user_id and product.categ_id=category.id and categ_id="+category.getId());
 			while(rs.next()){
-				
+				Product product = new Product();
 				product.setId(rs.getInt(1));
 				product.setName(rs.getString(2));
 				product.setDate(rs.getString(3));
@@ -104,10 +102,10 @@ public class ProductDao implements IProductDao{
 		Set<ProductDtoRes> products = new HashSet<ProductDtoRes>();
 		try {
 			ProductDtoRes productt = new ProductDtoRes();
-			Product product = new Product();
+			
 			rs = stmt.executeQuery("select product.id,product.name,product.date,price,descreption,user.name,product.image,product.status,category.name from product,user,category where user.id=product.user_id and product.categ_id=category.id and user.name='"+user.getName()+"'");
 			while(rs.next()){
-				
+				Product product = new Product();
 				product.setId(rs.getInt(1));
 				product.setName(rs.getString(2));
 				product.setDate(rs.getString(3));
@@ -129,13 +127,14 @@ public class ProductDao implements IProductDao{
 		
 		return products;
 	}
-	
+
 	@Override
 	public ProductDtoRes create(Product product) {
 		// TODO Auto-generated method stub
 		ProductDtoRes res= new ProductDtoRes();
 		try {
-			int ret = stmt.executeUpdate("insert into product (name,price,categ_id,descreption,user_id,image,status) values( '"+product.getName()+"' , "+ product.getPrice()+" , "+ product.getCategory().getId()+" , '"+ product.getDescreption()+"' , "+ product.getUser().getId()+" , '"+ product.getImage()+"' ,  '"+ product.getStatus()+"')");
+			
+			int ret = stmt.executeUpdate("insert into product (name,date,price,categ_id,descreption,user_id,image,status) values( '"+product.getName()+"' ,'"+product.getDate()+"', '"+ product.getPrice()+"' , '"+ product.getCategory().getId()+"' ,'"+ product.getDescreption()+"' , '"+ product.getUser().getId()+"' , '"+ product.getImage()+"' ,'new'"+")");
 			if(ret==1){
 				res.setResult(true);
 			}else
@@ -151,38 +150,10 @@ public class ProductDao implements IProductDao{
 	
 	
 	
-
-	@Override
-	public ProductDtoRes create1(Product product) {
-		// TODO Auto-generated method stub
-		ProductDtoRes res= new ProductDtoRes();
-		try {
-			int ret = stmt.executeUpdate("insert into product (name,price,descreption,image,status) values( '"+product.getName()+"' , '"+ product.getPrice()+"'  , '"+ product.getDescreption()+"'  , '"+ product.getImage()+"' ,  '"+ product.getStatus()+"')");
-			if(ret==1){
-				res.setResult(true);
-			}else
-			{
-				res.setResult(false);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return res;
-	}
-
-
+	
+	
 	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public boolean delete(String name) {
 		// TODO Auto-generated method stub
@@ -193,17 +164,17 @@ public class ProductDao implements IProductDao{
 	public ProductDtoRes find(int id) {
 		ResultSet rs;
 		ProductDtoRes productt = new ProductDtoRes();
-		Product product = new Product();
+		
 		try{
-		rs = stmt.executeQuery("select product.id,product.name,product.date,price,descreption,user.name,product.image,product.status,category.name from product,user,category where user.id=product.user_id and product.categ_id=category.id and product.id="+id);
+		rs = stmt.executeQuery("select product.id,product.name,product.date,price,descreption,user.name,product.image,product.status,category.name,user.address,user.city,user.phone from product,user,category where user.id=product.user_id and product.categ_id=category.id and product.id="+id);
 		while(rs.next()){
-			
+			Product product = new Product();
 			product.setId(rs.getInt(1));
 			product.setName(rs.getString(2));
 			product.setDate(rs.getString(3));
 			product.setPrice(rs.getDouble(4));
 			product.setDescreption(rs.getString(5));
-			product.setUser(new User(rs.getString(6)));
+			product.setUser(new User(rs.getString(6),rs.getString(10),rs.getString(11),rs.getInt(12)));
 			product.setImage(rs.getString(7));
 			product.setStatus(rs.getString(8));
 			product.setCategory(new Category(rs.getString(9)));
